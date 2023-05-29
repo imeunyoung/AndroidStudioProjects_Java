@@ -25,12 +25,14 @@ public class Fragment1 extends Fragment {
     private RecyclerView recyclerView;
     private MyAdapter adapter;
     ArrayList<Menu> menu = new ArrayList<Menu>();
-    ArrayList<Order> order = new ArrayList<Order>(); // 주문 목록에 담긴 메뉴를 저장하는 리스트
+    ArrayList<Order> order=new ArrayList<Order>();
 
     public Fragment1(){
 
     }
-
+    public void setOrder(ArrayList<Order> order) {
+        this.order = order;
+    }
 
 
     @Nullable
@@ -72,9 +74,26 @@ public class Fragment1 extends Fragment {
                 String quantityStr = quantityEditText.getText().toString();
                 int quantity = Integer.parseInt(quantityStr);
 
-//                menu.setQuantity(quantity);
+//                // 주문목록에 메뉴 추가
+//                if (order.contains(menu)) {
+//                    // 이미 주문목록에 있는 메뉴인 경우 수량만 업데이트
+//
+//
+//                    int index = order.indexOf(menu);
+//                    Order orderMenu = order.get(index);
+//                    orderMenu.setOrderQuantity(quantity);
+//                    ((MainActivity) getActivity()).orderAdapter.notifyDataSetChanged(); // 어댑터에 변경 내용을 알림
+//
+//                } else {
+                    // 주문목록에 새로운 메뉴 추가
+                    Order orderMenu = new Order(quantity, menu.getMenuName(), menu.getMenuPrice());
+//                    order.add(orderMenu);
+                    ((MainActivity) getActivity()).addOrder(orderMenu);
+
+//                }
 
                 Toast.makeText(getActivity(), menu.getMenuName()  +"이(가) "+ quantity + "개 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), order.get(order.size()-1).getOrderMenu(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -88,6 +107,8 @@ public class Fragment1 extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 
 
 }

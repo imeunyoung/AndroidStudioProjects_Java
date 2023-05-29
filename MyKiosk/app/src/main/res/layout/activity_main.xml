@@ -122,6 +122,7 @@
         android:orientation="horizontal">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/orderRecyclerView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.7"
