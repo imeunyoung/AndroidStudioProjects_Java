@@ -1,10 +1,13 @@
 package com.example.mykiosk;
 // OrderAdapter.java
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,10 +20,12 @@ import java.util.ArrayList;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
     private Context context;
     private ArrayList<Order> orderList;
+    private MainActivity mainActivity;
 
-    public OrderAdapter(Context context, ArrayList<Order> orderList) {
+    public OrderAdapter(Context context, ArrayList<Order> orderList, MainActivity mainActivity) {
         this.context = context;
         this.orderList = orderList;
+        this.mainActivity = mainActivity;
     }
 
     @NonNull
@@ -31,12 +36,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrderViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Order order = orderList.get(position);
 
         holder.quantityTextView.setText(String.valueOf(order.getOrderQuantity()));
         holder.menuTextView.setText(order.getOrderMenu());
-        holder.priceTextView.setText(order.getOrderPrice());
+        holder.priceTextView.setText(order.getUnitAmount());
+
+        holder.orderCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 주문 취소 버튼 클릭 시 해당 주문을 삭제합니다.
+                mainActivity.removeOrder(order);
+            }
+        });
     }
 
     @Override
@@ -52,6 +65,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         TextView totalQuantityTextView;
 
         TextView totalPriceTextView;
+        ImageButton orderCancelBtn;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +74,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             priceTextView = itemView.findViewById(R.id.order_menu_price);
             totalQuantityTextView=itemView.findViewById(R.id.order_total_price);
             totalPriceTextView=itemView.findViewById(R.id.order_total_price);
+            orderCancelBtn=itemView.findViewById(R.id.order_cancel_btn);
 
         }
     }

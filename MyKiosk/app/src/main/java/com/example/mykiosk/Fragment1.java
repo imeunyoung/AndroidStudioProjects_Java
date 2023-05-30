@@ -7,7 +7,9 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -62,20 +64,39 @@ public class Fragment1 extends Fragment {
         builder.setTitle("메뉴 추가");
         builder.setMessage(menu.getMenuName() + "의 수량을 변경하세요");
 
-        final EditText quantityEditText = new EditText(getActivity());
-        quantityEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(quantityEditText);
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.quantity_dialog, null);
+        final TextView quantityTextView = dialogView.findViewById(R.id.quantity_textview);
+        Button increaseButton = dialogView.findViewById(R.id.increase_button);
+        Button decreaseButton = dialogView.findViewById(R.id.decrease_button);
+
+        builder.setView(dialogView);
+
+        final int[] quantity = {1}; // 초기 수량은 1로 설정
+
+        increaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                quantity[0]++;
+                quantityTextView.setText(String.valueOf(quantity[0]));
+            }
+        });
+
+        decreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (quantity[0] > 1) {
+                    quantity[0]--;
+                    quantityTextView.setText(String.valueOf(quantity[0]));
+                }
+            }
+        });
 
         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String quantityStr = quantityEditText.getText().toString();
-                int quantity = Integer.parseInt(quantityStr);
-
                 // 주문목록에 새로운 메뉴 추가
-                Order orderMenu = new Order(quantity, menu.getMenuName(), menu.getMenuPrice());
+                Order orderMenu = new Order(quantity[0], menu.getMenuName(), menu.getMenuPrice());
                 ((MainActivity) getActivity()).addOrder(orderMenu);
-
             }
         });
 

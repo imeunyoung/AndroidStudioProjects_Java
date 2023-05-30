@@ -1,28 +1,36 @@
 package com.example.mykiosk.model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Order {
     int orderQuantity;
     String orderMenu;
-    String orderPrice;
+    String unitAmount;
 
-    public Order(int orderQuantity, String orderMenu, String orderPrice) {
+    String totalAmount;
+
+
+    public Order(int orderQuantity, String orderMenu, String unitAmount) {
         this.orderQuantity = orderQuantity;
         this.orderMenu = orderMenu;
-        this.orderPrice = orderPrice;
+        this.unitAmount=unitAmount;
+        this.totalAmount= String.valueOf(Integer.parseInt(unitAmount)*orderQuantity);
+    }
+    public static String getTotalQuantity(ArrayList<Order> orderList) {
+        int totalQuantity = 0;
+        for (Order order : orderList) {
+            totalQuantity += order.getOrderQuantity();
+        }
+        return String.valueOf(totalQuantity);
     }
 
-    public void setOrderQuantity(int orderQuantity) {
-        this.orderQuantity = orderQuantity;
-    }
-
-    public void setOrderMenu(String orderMenu) {
-        this.orderMenu = orderMenu;
-    }
-
-    public void setOrderPrice(String orderPrice) {
-        this.orderPrice = orderPrice;
+    public static String getTotalPrice(ArrayList<Order> orderList) {
+        Integer totalPrice = 0;
+        for (Order order : orderList) {
+            totalPrice += Integer.parseInt(order.getTotalAmount());
+        }
+        return String.valueOf(totalPrice);
     }
 
     public int getOrderQuantity() {
@@ -33,8 +41,11 @@ public class Order {
         return orderMenu;
     }
 
-    public String getOrderPrice() {
-        return orderPrice;
+    public String getUnitAmount() {
+        return unitAmount;
     }
 
+    public String getTotalAmount() {
+        return totalAmount;
+    }
 }

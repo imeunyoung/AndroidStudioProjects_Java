@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mykiosk.model.Menu;
@@ -18,10 +19,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button btn1,btn2,btn3,btn4;
+    Button orderAllCancelBtn;
 
     private ArrayList<Order> orderList = new ArrayList<Order>();
     private RecyclerView recyclerView;
     public OrderAdapter orderAdapter;
+
+    private TextView totalOrderQuantityTextView;
+    private TextView totalOrderPriceTextView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -40,15 +45,23 @@ public class MainActivity extends AppCompatActivity {
         btn2=(Button) findViewById(R.id.menu2);
         btn3=(Button) findViewById(R.id.menu3);
         btn4=(Button) findViewById(R.id.menu4);
+        orderAllCancelBtn=(Button)findViewById(R.id.order_all_cancel) ;
 
         recyclerView = findViewById(R.id.orderRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        totalOrderQuantityTextView=findViewById(R.id.order_total_quantity);
+        totalOrderPriceTextView=findViewById(R.id.order_total_price);
 
 
-
-        orderAdapter = new OrderAdapter(this, orderList);
+        orderAdapter = new OrderAdapter(this, orderList,this);
         recyclerView.setAdapter(orderAdapter);
 
+        orderAllCancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                allRemoveOrder();
+            }
+        });
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,5 +106,19 @@ public class MainActivity extends AppCompatActivity {
     public void addOrder(Order order) {
         orderList.add(order);
         orderAdapter.notifyDataSetChanged();
+        totalOrderQuantityTextView.setText(Order.getTotalQuantity(orderList));
+        totalOrderPriceTextView.setText(Order.getTotalPrice(orderList));
+    }
+    public void removeOrder(Order order) {
+        orderList.remove(order);
+        orderAdapter.notifyDataSetChanged();
+        totalOrderQuantityTextView.setText(Order.getTotalQuantity(orderList));
+        totalOrderPriceTextView.setText(Order.getTotalPrice(orderList));
+    }
+    public void allRemoveOrder(){
+        orderList.removeAll(orderList);
+        orderAdapter.notifyDataSetChanged();
+        totalOrderQuantityTextView.setText(Order.getTotalQuantity(orderList));
+        totalOrderPriceTextView.setText(Order.getTotalPrice(orderList));
     }
 }
