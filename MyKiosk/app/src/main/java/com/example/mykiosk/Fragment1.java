@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mykiosk.model.Burger;
 import com.example.mykiosk.model.Menu;
 import com.example.mykiosk.model.Order;
 
@@ -24,15 +25,12 @@ import java.util.ArrayList;
 public class Fragment1 extends Fragment {
     private RecyclerView recyclerView;
     private MyAdapter adapter;
-    ArrayList<Menu> menu = new ArrayList<Menu>();
-    ArrayList<Order> order=new ArrayList<Order>();
+    ArrayList<Burger> burgerList = new ArrayList<>();
 
     public Fragment1(){
 
     }
-    public void setOrder(ArrayList<Order> order) {
-        this.order = order;
-    }
+
 
 
     @Nullable
@@ -41,13 +39,13 @@ public class Fragment1 extends Fragment {
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment1,container,false);
         recyclerView=(RecyclerView) rootView.findViewById(R.id.recyclerview);
-        menu.add(new Menu(R.drawable.hamburger1,"햄버거1","10000"));
-        menu.add(new Menu(R.drawable.hamburger1,"햄버거2","11000"));
-        menu.add(new Menu(R.drawable.hamburger1,"햄버거3","12000"));
-        menu.add(new Menu(R.drawable.hamburger1,"햄버거4","13000"));
+        burgerList.add(new Burger("햄버거1",R.drawable.hamburger1,"10000"));
+        burgerList.add(new Burger("햄버거2",R.drawable.hamburger1,"11000"));
+        burgerList.add(new Burger("햄버거3",R.drawable.hamburger1,"12000"));
+        burgerList.add(new Burger("햄버거4",R.drawable.hamburger1,"13000"));
         recyclerView.setHasFixedSize(true);
 
-        adapter=new MyAdapter(getActivity(),menu,new MyAdapter.OnItemClickListener(){
+        adapter=new MyAdapter(getActivity(),burgerList,new MyAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(Menu menu) {
                 showQuantityDialog(menu);
@@ -74,26 +72,10 @@ public class Fragment1 extends Fragment {
                 String quantityStr = quantityEditText.getText().toString();
                 int quantity = Integer.parseInt(quantityStr);
 
-//                // 주문목록에 메뉴 추가
-//                if (order.contains(menu)) {
-//                    // 이미 주문목록에 있는 메뉴인 경우 수량만 업데이트
-//
-//
-//                    int index = order.indexOf(menu);
-//                    Order orderMenu = order.get(index);
-//                    orderMenu.setOrderQuantity(quantity);
-//                    ((MainActivity) getActivity()).orderAdapter.notifyDataSetChanged(); // 어댑터에 변경 내용을 알림
-//
-//                } else {
-                    // 주문목록에 새로운 메뉴 추가
-                    Order orderMenu = new Order(quantity, menu.getMenuName(), menu.getMenuPrice());
-//                    order.add(orderMenu);
-                    ((MainActivity) getActivity()).addOrder(orderMenu);
+                // 주문목록에 새로운 메뉴 추가
+                Order orderMenu = new Order(quantity, menu.getMenuName(), menu.getMenuPrice());
+                ((MainActivity) getActivity()).addOrder(orderMenu);
 
-//                }
-
-                Toast.makeText(getActivity(), menu.getMenuName()  +"이(가) "+ quantity + "개 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getActivity(), order.get(order.size()-1).getOrderMenu(), Toast.LENGTH_SHORT).show();
             }
         });
 

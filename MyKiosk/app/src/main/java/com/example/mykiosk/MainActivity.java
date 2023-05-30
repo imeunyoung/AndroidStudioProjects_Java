@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment1 fragment1 = new Fragment1();
-        fragment1.setOrder(orderList); // order 리스트 전달
+//        fragment1.setOrder(orderList); // order 리스트 전달
         transaction.replace(R.id.frame,fragment1);
         transaction.commit();
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 Fragment1 fragment1 = new Fragment1();
-                fragment1.setOrder(orderList); // order 리스트 전달
+//                fragment1.setOrder(orderList); // order 리스트 전달
                 transaction.replace(R.id.frame,fragment1);
                 transaction.commit();
             }

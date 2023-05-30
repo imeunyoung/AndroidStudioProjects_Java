@@ -1,5 +1,7 @@
 package com.example.mykiosk.model;
 
+import java.util.Objects;
+
 public class Order {
     int orderQuantity;
     String orderMenu;
@@ -34,4 +36,5 @@ public class Order {
     public String getOrderPrice() {
         return orderPrice;
     }
+
 }

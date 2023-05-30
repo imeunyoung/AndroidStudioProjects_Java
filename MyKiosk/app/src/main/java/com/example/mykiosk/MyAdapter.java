@@ -17,10 +17,10 @@ import java.util.ArrayList;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     Context context;
 
-    ArrayList<Menu> menuArrayList;
+    ArrayList<? extends Menu> menuArrayList;
     private OnItemClickListener listener;
 
-    public MyAdapter(Context context, ArrayList<Menu> menuArrayList,OnItemClickListener listener) {
+    public MyAdapter(Context context, ArrayList<? extends Menu> menuArrayList,OnItemClickListener listener) {
 
         this.context = context;
         this.menuArrayList=menuArrayList;
