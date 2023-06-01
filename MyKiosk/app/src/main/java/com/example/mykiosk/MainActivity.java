@@ -6,20 +6,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mykiosk.model.Card;
+import com.example.mykiosk.model.Coupon;
 import com.example.mykiosk.model.Menu;
 import com.example.mykiosk.model.Order;
+import com.example.mykiosk.model.Payment;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button btn1,btn2,btn3,btn4;
     Button orderAllCancelBtn;
+    Button orderPayCardBtn;
+    Button orderPayCouponBtn;
 
     private ArrayList<Order> orderList = new ArrayList<Order>();
     private RecyclerView recyclerView;
@@ -46,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         btn3=(Button) findViewById(R.id.menu3);
         btn4=(Button) findViewById(R.id.menu4);
         orderAllCancelBtn=(Button)findViewById(R.id.order_all_cancel) ;
+        orderPayCardBtn=(Button)findViewById(R.id.order_pay_card_btn);
+        orderPayCouponBtn=(Button)findViewById(R.id.order_pay_coupon_btn);
 
         recyclerView = findViewById(R.id.orderRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,10 +66,85 @@ public class MainActivity extends AppCompatActivity {
         orderAdapter = new OrderAdapter(this, orderList,this);
         recyclerView.setAdapter(orderAdapter);
 
+        //주문 전체 취소 버튼
         orderAllCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 allRemoveOrder();
+            }
+        });
+        //카드 결제 버튼
+        orderPayCardBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("테이크아웃 하시겠습니까?");
+
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean isTakeout = true;
+                        Intent intent= new Intent(MainActivity.this,CardPaymentActivity.class);
+
+                        intent.putExtra("totalPrice",Integer.parseInt(Order.getTotalPrice(orderList)));
+                        intent.putExtra("isTakeout",isTakeout);
+                        startActivity(intent);
+
+                    }
+                });
+
+                builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean isTakeout = false;
+                        Intent intent= new Intent(MainActivity.this,CardPaymentActivity.class);
+
+                        intent.putExtra("totalPrice",Integer.parseInt(Order.getTotalPrice(orderList)));
+                        intent.putExtra("isTakeout",isTakeout);
+                        startActivity(intent);
+
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+        //쿠폰 결제 버튼
+        orderPayCouponBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("테이크아웃 하시겠습니까?");
+
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean isTakeout = true;
+
+                        Coupon coupon = new Coupon();
+                        Payment couponPay = new Payment(coupon, Integer.parseInt(Order.getTotalPrice(orderList)), isTakeout);
+                        // 예를 선택한 경우에 대한 처리
+                        couponPay.pay(); //쿠폰 결제
+
+                    }
+                });
+
+                builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean isTakeout = false;
+
+                        Coupon coupon = new Coupon();
+                        Payment couponPay = new Payment(coupon, Integer.parseInt(Order.getTotalPrice(orderList)), isTakeout);
+                        // 예를 선택한 경우에 대한 처리
+                        couponPay.pay(); //쿠폰 결제
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
             }
         });
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Order {
+
     int orderQuantity;
     String orderMenu;
     String unitAmount;
