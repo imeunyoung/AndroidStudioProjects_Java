@@ -14,5 +14,3 @@ public class ReceiptPrinter {
         this.totalMenu=totalMenu;
     }
 
-    String printReceipt(){
-
