@@ -26,8 +26,7 @@ public class CardPaymentActivity extends AppCompatActivity {
         int totalPrice = intent.getIntExtra("totalPrice", 0);
         boolean isTakeout=intent.getBooleanExtra("isTakeout",false);
         inputCardBtn=(Button)findViewById(R.id.input_card_btn);
-        Log.d("totalPrice", String.valueOf(totalPrice));
-        Log.d("isTakeout", String.valueOf(isTakeout));
+
 
         inputCardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +40,10 @@ public class CardPaymentActivity extends AppCompatActivity {
                 TextView paymentResultText = findViewById(R.id.payment_result_text);
                 if (isPay.equals("결제 성공")) {
                     paymentResultText.setText("결제가 완료되었습니다.");
+                    Intent intent= new Intent(CardPaymentActivity.this,OrderFinishActivity.class);
+                    intent.putExtra("orderNumber",Payment.orderNumber);
+                    startActivity(intent);
+
                 } else {
                     paymentResultText.setText("결제에 실패하였습니다.");
                 }

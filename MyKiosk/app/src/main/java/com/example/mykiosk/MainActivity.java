@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
                         intent.putExtra("totalPrice",Integer.parseInt(Order.getTotalPrice(orderList)));
                         intent.putExtra("isTakeout",isTakeout);
+
                         startActivity(intent);
 
                     }

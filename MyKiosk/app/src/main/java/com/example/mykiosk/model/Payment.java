@@ -3,7 +3,8 @@ package com.example.mykiosk.model;
 import android.util.Log;
 
 public class Payment {
-    static int orderNumber=0;
+
+    public static int orderNumber=0;
     Coupon coupon;
     Card card;
     String paymentType;
